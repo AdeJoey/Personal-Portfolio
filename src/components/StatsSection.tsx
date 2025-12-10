@@ -58,9 +58,9 @@ function StatItem({ value, numericValue, suffix, label, delay }: StatItemProps) 
 }
 
 const stats = [
-    { value: "20+", numericValue: 10, suffix: "+", label: "PROJECTS COMPLETED" },
-    { value: "5+", numericValue: 5, suffix: "+", label: "HAPPY CLIENTS" },
-    { value: "5+", numericValue: 1, suffix: "+", label: "YEARS EXPERIENCE" },
+    { value: "20+", numericValue: 20, suffix: "+", label: "PROJECTS COMPLETED" },
+    { value: "5+", numericValue: 15, suffix: "+", label: "HAPPY CLIENTS" },
+    { value: "5+", numericValue: 5, suffix: "+", label: "YEARS EXPERIENCE" },
 ];
 
 export function StatsSection() {
