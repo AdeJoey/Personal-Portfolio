@@ -90,12 +90,16 @@ export function Header() {
                                 }
                                 align="right"
                             >
-                                <DropdownMenuItem>Portfolio</DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <Link href="#resume" className="w-full block">Resume</Link>
+                                    <Link href="#projects" className="w-full block">Portfolio</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <a href="/resume.pdf" download="Adelaja-Joseph-Resume.pdf" className="w-full block">Resume</a>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>Contact</DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <a href="mailto:adelajajoseph10@gmail.com" className="w-full block">Contact</a>
+                                </DropdownMenuItem>
                             </DropdownMenu>
                         </div>
 
