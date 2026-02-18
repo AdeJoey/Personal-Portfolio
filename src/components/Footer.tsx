@@ -8,13 +8,13 @@ import { Checkbox } from "./ui/Checkbox";
 
 const socialLinks = [
     { label: "LINKEDIN", href: "https://linkedin.com/in/adelaja-joseph-600787254" },
-    { label: "GITHUB", href: "https://github.com" },
+    { label: "GITHUB", href: "https://github.com/AdeJoey" },
     { label: "EMAIL", href: "mailto:adelajajoseph10@gmail.com" },
 ];
 
 const bottomLinks = [
     { label: "LINKEDIN", href: "https://linkedin.com/in/adelaja-joseph-600787254" },
-    { label: "GITHUB", href: "https://github.com" },
+    { label: "GITHUB", href: "https://github.com/AdeJoey" },
 ];
 
 export function Footer() {

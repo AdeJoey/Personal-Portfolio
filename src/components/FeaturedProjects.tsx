@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/Tabs";
 import Image from "next/image";
+import { Dialog } from "./ui/Dialog";
 
 interface ProjectCardProps {
     title: string;
@@ -11,16 +13,19 @@ interface ProjectCardProps {
     imageSrc: string;
     delay: number;
     type: "mobile" | "web";
+    onOpen?: () => void;
 }
 
-function ProjectCard({ title, subtitle, imageSrc, delay, type }: ProjectCardProps) {
+function ProjectCard({ title, subtitle, imageSrc, delay, type, onOpen }: ProjectCardProps) {
     return (
-        <motion.div
+        <motion.button
+            onClick={onOpen}
+            type="button"
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay, ease: "easeOut" }}
-            className="h-full"
+            className="h-full text-left"
             data-cursor-text="View"
         >
             {/* Project Image - Clean, Full Display */}
@@ -56,41 +61,61 @@ function ProjectCard({ title, subtitle, imageSrc, delay, type }: ProjectCardProp
                     {subtitle}
                 </p>
             </div>
-        </motion.div>
+        </motion.button>
     );
 }
 
-const mobileProjects = [
+type Project = {
+    title: string;
+    subtitle: string;
+    imageSrc: string;
+    type: "mobile" | "web";
+    stacks: string[];
+    website?: string;
+};
+
+const mobileProjects: Project[] = [
     {
         title: "5G SQUARE",
         subtitle: "RESTAURANT & ENTERTAINMENT WEB APP",
         imageSrc: "/projects/webApp15Gsquare.jpg",
-        type: "mobile" as const,
+        type: "mobile",
+        stacks: ["React", "Next.js", "Tailwind CSS"],
+        website: "",
     },
 ];
 
-const webProjects = [
+const webProjects: Project[] = [
     {
         title: "CAIRO RESTAURANTS",
         subtitle: "RESTAURANT WEBSITE DESIGN",
         imageSrc: "/projects/Cairo.png",
-        type: "web" as const,
+        type: "web",
+        stacks: ["HTML", "CSS", "JavaScript"],
+        website: "cairo-restaurants.vercel.app",
     },
     {
-        title: "SOMMY",
+        title: "BRILLO",
         subtitle: "CREATIVE WEB DESIGN",
-        imageSrc: "/projects/Sommy.png",
-        type: "web" as const,
+        imageSrc: "/projects/brillo.png",
+        type: "web",
+        stacks: ["React", "Framer Motion", "Tailwind CSS", "Next"],
+        website: "design-joey.vercel.app",
     },
     {
         title: "AMAKA",
         subtitle: "PORTFOLIO SHOWCASE",
         imageSrc: "/projects/Amaka.png",
-        type: "web" as const,
+        type: "web",
+        stacks: ["Next.js", "TypeScript", "Vercel"],
+        website: "amaka-fashion.vercel.app",
     },
 ];
 
 export function FeaturedProjects() {
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const isOpen = Boolean(selectedProject);
+
     return (
         <section id="projects" className="py-20 bg-white overflow-hidden">
             <div className="container-main">
@@ -138,6 +163,7 @@ export function FeaturedProjects() {
                                         key={project.title}
                                         {...project}
                                         delay={index * 0.1}
+                                        onOpen={() => setSelectedProject(project)}
                                     />
                                 ))}
                             </div>
@@ -179,6 +205,7 @@ export function FeaturedProjects() {
                                         <ProjectCard
                                             {...project}
                                             delay={index * 0.1}
+                                            onOpen={() => setSelectedProject(project)}
                                         />
                                     </motion.div>
                                 ))}
@@ -187,6 +214,54 @@ export function FeaturedProjects() {
                     </Tabs>
                 </div>
             </div>
+
+            {/* Project Preview Modal */}
+            <Dialog isOpen={isOpen} onClose={() => setSelectedProject(null)} title={selectedProject?.title}>
+                {/* Preview area: iframe if website provided, otherwise image */}
+                {selectedProject?.website ? (
+                    <div className="w-full h-64 mb-6 rounded overflow-hidden">
+                        <iframe
+                            src={selectedProject.website?.startsWith("http") ? selectedProject.website : `https://${selectedProject.website}`}
+                            className="w-full h-full border-0"
+                            title={selectedProject.title}
+                            loading="lazy"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                            referrerPolicy="no-referrer"
+                            allowFullScreen
+                        />
+                    </div>
+                ) : (
+                    <div className="w-full h-64 mb-6 rounded overflow-hidden bg-gray-50 flex items-center justify-center">
+                        <Image src={selectedProject?.imageSrc || ""} alt={selectedProject?.title || ""} width={1200} height={700} className="object-cover w-full h-full" />
+                    </div>
+                )}
+
+                {/* Stacks */}
+                <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-800 mb-2">Stacks</h4>
+                    <div className="flex flex-wrap gap-2">
+                        {selectedProject?.stacks.map((s) => (
+                            <span key={s} className="inline-flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                                {s}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                {/* View full website button */}
+                <div className="flex items-center justify-end">
+                    {selectedProject?.website ? (
+                        <a href={selectedProject.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800">
+                            View full website
+                            <ArrowUpRight size={16} />
+                        </a>
+                    ) : (
+                        <button className="inline-flex items-center gap-2 rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-600 cursor-not-allowed" disabled>
+                            View full website
+                        </button>
+                    )}
+                </div>
+            </Dialog>
         </section>
     );
 }
